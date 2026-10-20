@@ -18,7 +18,15 @@ class ClienteFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'codigo' => fake()->unique()->bothify('CLI-#####'),
+            'nombre' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'telefono' => fake()->numerify('+504 ########'),
+            'direccion' => fake()->address(),
+            'estado' => $this->faker->randomElement([
+                'Activo',
+                'Inactivo',
+            ]),
         ];
     }
 }

@@ -18,7 +18,15 @@ class EmpleadoFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'codigo' => fake()->unique()->bothify('EMP-#####'),
+            'nombre' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'cargo' => fake()->jobTitle(),
+            'fecha_contratacion' => fake()->date(),
+            'estado' => $this->faker->randomElement([
+                'Activo',
+                'Inactivo',
+            ]),
         ];
     }
 }
