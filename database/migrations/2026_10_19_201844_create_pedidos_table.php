@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
+            $table->foreignId('empleado_id')->constrained('empleados')->onDelete('cascade');
+            $table->string('numero_pedido',20)->unique();
+            $table->date('fecha_pedido');
+            $table->date('fecha_entrega')->nullable();
+            $table->decimal('total',10,2)->default(0);
+            $table->enum('estado',['Pendiente','En Proceso','Entregado','Cancelado'])->default('Pendiente');
+            $table->text('observaciones')->nullable();
             $table->timestamps();
         });
     }

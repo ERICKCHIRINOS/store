@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('empleados', function (Blueprint $table) {
             $table->id();
+            $table->string('codigo',20)->unique();
+            $table->string('nombre',100);
+            $table->string('email',100)->unique();
+            $table->string('cargo',60);
+            $table->date('fecha_contratacion');
+            $table->enum('estado',['Activo','Inactivo'])->default('Activo');
             $table->timestamps();
         });
     }
