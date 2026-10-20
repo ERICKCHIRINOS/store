@@ -12,7 +12,10 @@ class EmpleadoController extends Controller
      */
     public function index()
     {
-        //
+        $empleados = Empleado::all();
+        dd($empleados);
+        return view('empleados.index', compact('empleados'));
+
     }
 
     /**

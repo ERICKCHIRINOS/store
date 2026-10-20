@@ -12,7 +12,10 @@ class PedidoController extends Controller
      */
     public function index()
     {
-        //
+        $pedidos = Pedido::with(['cliente', 'empleado'])->get();
+        dd($pedidos);
+        return view('pedidos.index', compact('pedidos'));
+
     }
 
     /**
