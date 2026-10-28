@@ -12,7 +12,8 @@ Route::get('/', function () {
 });
 
 Route::get('/categoria', [CategoriaController::class, 'index']);
-Route::get('/cliente', [ClienteController::class, 'index']);
+Route::get('/cliente', [ClienteController::class, 'index'])->name('clientes.index');
+Route::post('/cliente', [ClienteController::class, 'store'])->name('clientes.store');
 Route::get('/empleado', [EmpleadoController::class, 'index']);
 Route::get('/producto', [ProductoController::class, 'index']);
 Route::get('/pedido', [PedidoController::class, 'index']);

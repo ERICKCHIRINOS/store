@@ -13,9 +13,8 @@ class ClienteController extends Controller
     public function index()
     {
         $clientes = Cliente::all();
-        dd($clientes);
+        // dd($clientes);
         return view('clientes.index', compact('clientes'));
-
     }
 
     /**
@@ -31,7 +30,18 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'codigo' => 'required|string|max:20|unique:clientes,codigo',
+            'nombre' => 'required|string|max:100',
+            'email' => 'required|email|max:100|unique:clientes,email',
+            'telefono' => 'nullable|string|max:20',
+            'direccion' => 'nullable|string|max:255',
+            'estado' => 'required|in:Activo,Inactivo',
+        ]);
+
+        Cliente::create($validate);
+
+        return redirect()->route('clientes.index')->with('estatus', 'Cliente creado exitosamente');
     }
 
     /**

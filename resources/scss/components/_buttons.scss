@@ -1,0 +1,39 @@
+// ==================================================
+// COMPONENTES: BOTONES
+// ==================================================
+// Propósito:
+// Personalizar la apariencia de los botones.
+//
+// Aquí se podrán trabajar:
+// - Colores y fondos.
+// - Bordes y radios.
+// - Tamaños y espaciado.
+// - Sombras.
+// - Estados hover, focus, active y disabled.
+// - Variantes propias, por ejemplo: .btn-register.
+//
+// Objetivo:
+// Mantener los estilos de botones en un solo lugar
+// y reutilizarlos en diferentes vistas Blade.
+// ==================================================
+.btn-register {
+    background-color: #7c3aed;
+    color: #ffffff;
+    border: 2px solid #7c3aed;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 600;
+    box-shadow: 0 6px 15px rgb(124 58 237 / 40%);
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        background-color: #5b21b6;
+        border-color: #5b21b6;
+        box-shadow: -4px 8px 20px rgb(124 58 237 / 50%);
+        transform: translateY(-2px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
