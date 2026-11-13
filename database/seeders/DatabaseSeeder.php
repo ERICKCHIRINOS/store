@@ -23,11 +23,13 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            CategoriaSeeder::class,
-            ClienteSeeder::class,
-            EmpleadoSeeder::class,
-            ProductoSeeder::class,
-            PedidoSeeder::class,
+            // CategoriaSeeder::class,
+            // ClienteSeeder::class,
+            // EmpleadoSeeder::class,
+            // ProductoSeeder::class,
+            // PedidoSeeder::class,
+            // ProductoSeeder::class,
+            ProveedorSeeder::class
         ]);
     }
 }

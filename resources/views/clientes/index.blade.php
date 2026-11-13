@@ -11,7 +11,7 @@
 <body>
     <nav class="navbar md:navbar-expand bg-1" data-bs-theme="dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">STORE</a>
+            <a class="navbar-brand" href="/">STORE</a>
             <button class="btn-icon navbar-toggler" type="button" data-bs-toggle="drawer"
                 data-bs-target="#navbarDarkDrawer" aria-controls="navbarDarkDrawer" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -26,31 +26,39 @@
                 <div class="drawer-body mb-2 md:mb-0">
                     <ul class="nav navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Categorias</a>
+                            <a class="nav-link" aria-current="page"
+                                href="{{ route('bodegas.index') }}">Bodegas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Empleados</a>
+                            <a class="nav-link" aria-current="page" href="{{ route('categorias.index') }}">Categorias</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Pedidos</a>
+                            <a class="nav-link active" aria-current="page" href="{{ route('clientes.index') }}">Clientes</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Productos</a>
+                            <a class="nav-link" href="{{ route('empleados.index') }}">Empleados</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('pedidos.index') }}">Pedidos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('productos.index') }}">Productos</a>
                         </li>
                         <li class="nav-item">
                             <button class="nav-link" type="button" data-bs-toggle="menu" aria-expanded="false">
                                 Menu
                             </button>
                             <div class="menu">
-                                <a class="menu-item" href="#">Actualizar</a>
+                                <a class="menu-item" href="{{ route('clientes.index') }}">Mostrar todo</a>
                                 <a class="menu-item" href="#">Another action</a>
                                 <hr class="menu-divider">
                                 <a class="menu-item" href="#">Something else here</a>
                             </div>
                         </li>
                     </ul>
-                    <form class="hstack gap-2" role="search">
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search" />
+                    <form action="{{ route('clientes.index') }}" method="GET" class="hstack gap-2" role="search">
+                        <input class="form-control" name="codigo" type="search" placeholder="Search"
+                            aria-label="Search" />
                         <button class="btn-solid btn-icon theme-secondary" type="submit">
                             <svg class="bi" width="16" height="16">
                                 <use href="#search" />
@@ -88,15 +96,23 @@
             </div>
 
             <div class="dialog-body overflow-y-auto flex-grow-1 p-3">
+
                 <div class="mb-3">
                     <label for="codigo" class="form-label">Codigo</label>
-                    <input type="text" class="form-control" id="codigo" name="codigo" placeholder="CLI-#####">
+                    <input type="text" class="form-control" id="codigo" name="codigo"
+                        placeholder="CLI-#####">
                 </div>
 
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre</label>
                     <input type="text" class="form-control" id="nombre" name="nombre"
                         placeholder="Erick Chirinos">
+
+                    @error('nombre')
+                        <div class="invalid-feedback">
+                            <p>{{ $message }}</p>
+                        </div>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
@@ -123,7 +139,7 @@
                 <div class="mb-3">
                     <label for="estado" class="form-label">Estado</label>
                     <button id="estado" class="form-control combobox-toggle" type="button"
-                        data-bs-toggle="combobox" data-bs-name="estado" data-bs-placeholder="Selecciona un estado">
+                        data-bs-toggle="combobox" data-bs-name="estado" data-bs-placeholder="Escoja un Estado">
                         <span class="combobox-value">Selecciona un estado</span>
                         <svg class="combobox-caret" width="10" height="16" viewBox="0 0 10 16"
                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -133,7 +149,8 @@
                         </svg>
                     </button>
                     <div class="menu">
-                        <button class="menu-item" type="button" data-bs-value="Activo">Activo</button>
+                        <button class="menu-item selected" type="button" data-bs-value="Activo"
+                            aria-selected="true">Activo</button>
                         <button class="menu-item" type="button" data-bs-value="Inactivo">Inactivo</button>
                     </div>
                     <div class="form-text">Selecciona el estado del cliente.</div>
@@ -147,9 +164,45 @@
         </form>
     </dialog>
 
+    @if (session('status'))
+        {{-- <div class="alert theme-primary" role="alert">
+            {{ session('status') }}
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div> --}}
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
+            style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+            <div class="toast-header">
+                <strong class="me-auto">Exito!</strong>
+                <small>Bien hecho!</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                {{ session('status') }}
+            </div>
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
+            style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+            <div class="toast-header">
+                <strong class="me-auto">Alerta!</strong>
+                <small>Se encontraron los siguientes errores</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    @endif
+
     <div class="container-fluid px-4">
-        <div class="table-responsive">
-            <table class="table table-dark table-hover align-middle">
+        <div class="table-responsive border rounded overflow-hidden">
+            <table class="table table-dark table-hover align-middle table-striped mb-0">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -174,8 +227,112 @@
                             <td>{{ $cliente->estado }}</td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Outlined example">
-                                    <button type="button" class="btn btn-outline-primary btn-sm">Editar</button>
-                                    <button type="button" class="btn btn-outline-danger btn-sm">Eliminar</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm"
+                                        data-bs-toggle="dialog"
+                                        data-bs-target="#staticBackdropDialogEditar{{ $cliente->id }}">Editar</button>
+
+                                    <dialog class="dialog dialog-scrollable d-flex flex-column"
+                                        id="staticBackdropDialogEditar{{ $cliente->id }}" style="max-height: 85vh;">
+                                        <form action="{{ route('clientes.update', $cliente->id) }}" method="POST"
+                                            class="d-flex flex-column overflow-hidden h-100 m-0">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="dialog-header flex-shrink-0">
+                                                <h1 class="dialog-title">Ingrese los datos del nuevo Cliente</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="dialog"
+                                                    aria-label="Close"></button>
+                                            </div>
+
+                                            <div class="dialog-body overflow-y-auto flex-grow-1 p-3">
+
+                                                <div class="mb-3">
+                                                    <label for="codigo" class="form-label">Codigo</label>
+                                                    <input type="text" class="form-control" id="codigo"
+                                                        name="codigo" value="{{ old('codigo', $cliente->codigo) }}"
+                                                        placeholder="CLI-#####">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="nombre" class="form-label">Nombre</label>
+                                                    <input type="text" class="form-control" id="nombre"
+                                                        name="nombre" value="{{ old('nombre', $cliente->nombre) }}"
+                                                        placeholder="Erick Chirinos">
+
+                                                    @error('nombre')
+                                                        <div class="invalid-feedback">
+                                                            <p>{{ $message }}</p>
+                                                        </div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="email" class="form-label">Correo
+                                                        electrónico</label>
+                                                    <input type="email" class="form-control" id="email"
+                                                        name="email" value="{{ old('email', $cliente->email) }}"
+                                                        placeholder="name@example.com">
+                                                    <div class="form-text">
+                                                        Tu correo electrónico se utilizará para identificar al cliente.
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="telefono" class="form-label">Telefono</label>
+                                                    <input type="text" class="form-control" id="telefono"
+                                                        name="telefono"
+                                                        value="{{ old('telefono', $cliente->telefono) }}"
+                                                        placeholder="+504 93983261">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="direccion" class="form-label">Direccion</label>
+                                                    <input type="text" class="form-control" id="direccion"
+                                                        name="direccion"
+                                                        value="{{ old('direccion', $cliente->direccion) }}"
+                                                        placeholder="Col. Carmen Elena">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="estado" class="form-label">Estado</label>
+
+                                                    <button id="estado" class="form-control combobox-toggle"
+                                                        type="button" data-bs-toggle="combobox"
+                                                        data-bs-name="estado" data-bs-placeholder="Escoja un Estado">
+                                                        <span class="combobox-value">Selecciona un estado</span>
+                                                        <svg class="combobox-caret" width="10" height="16"
+                                                            viewBox="0 0 10 16" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M0.46967 5.46967C0.762563 5.17678 1.23744 5.17678 1.53033 5.46967L5 8.93934L8.46967 5.46967C8.76256 5.17678 9.23744 5.17678 9.53033 5.46967C9.82322 5.76256 9.82322 6.23744 9.53033 6.53033L5.53033 10.5303C5.23744 10.8232 4.76256 10.8232 4.46967 10.5303L0.46967 6.53033C0.176777 6.23744 0.176777 5.76256 0.46967 5.46967Z"
+                                                                fill="currentcolor" />
+                                                        </svg>
+                                                    </button>
+                                                    <div class="menu">
+                                                        <button class="menu-item selected" type="button"
+                                                            data-bs-value="Activo"
+                                                            aria-selected="true">Activo</button>
+                                                        <button class="menu-item" type="button"
+                                                            data-bs-value="Inactivo">Inactivo</button>
+                                                    </div>
+                                                    <div class="form-text">Selecciona el estado del cliente.</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="dialog-footer flex-shrink-0">
+                                                <button type="button" class="btn-solid theme-secondary"
+                                                    data-bs-dismiss="dialog">Cerrar</button>
+                                                <button type="submit" class="btn-solid theme-primary">Actualizar
+                                                    cliente</button>
+                                            </div>
+                                        </form>
+                                    </dialog>
+
+                                    <form action="{{ route('clientes.destroy', [$cliente->id]) }}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">Eliminar</button>
+                                    </form>
+
                                 </div>
                             </td>
                         </tr>
