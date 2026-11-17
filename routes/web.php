@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\EmpleadoController;
@@ -11,6 +12,16 @@ use App\Http\Controllers\ProveedorController;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 Route::get('/bodega', [BodegaController::class, 'index'])->name('bodegas.index');
@@ -47,3 +58,5 @@ Route::get('/proveedor', [ProveedorController::class, 'index'])->name('proveedor
 Route::post('/proveedor', [ProveedorController::class, 'store'])->name('proveedor.store');
 Route::delete('/proveedor{id}', [ProveedorController::class, 'destroy'])->name('proveedor.destroy');
 Route::put('/proveedor{proveedor}', [ProveedorController::class, 'update'])->name('proveedor.update');
+
+require __DIR__.'/auth.php';
